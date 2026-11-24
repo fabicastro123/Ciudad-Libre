@@ -1,0 +1,29 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    container:
+      image: barichello/godot-ci:4.3
+
+    steps:
+      - name: Download project
+        uses: actions/checkout@v4
+
+      - name: Build APK
+        run: |
+          mkdir -p build
+          godot --headless --path . --editor --quit
+          godot --headless --path . --export-debug "Android" build/CiudadLibre.apk
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: CiudadLibre-Android-APK
+          path: build/CiudadLibre.apk
