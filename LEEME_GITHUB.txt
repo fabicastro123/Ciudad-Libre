@@ -1,0 +1,19 @@
+COMPILAR GTA: CIUDAD LIBRE CON GITHUB ACTIONS
+
+1) Crear una cuenta en https://github.com si todavía no tenés.
+2) Crear un repositorio nuevo, por ejemplo CiudadLibre.
+3) Subir TODO el contenido de esta carpeta (incluida la carpeta oculta .github).
+4) Abrir la pestaña Actions del repositorio.
+5) Elegir "Build Android APK" y tocar "Run workflow".
+6) Esperar a que termine el trabajo en verde.
+7) Entrar al trabajo completado y descargar el artefacto "CiudadLibre-Android-APK".
+8) Descomprimirlo y copiar CiudadLibre.apk al teléfono. Abrirlo para instalarlo; Android puede pedir permiso para instalar desde esa fuente.
+
+CONFIGURACIÓN INCLUIDA
+- Godot 4.3, que coincide con la versión declarada por el proyecto.
+- Android ARM64 (arm64-v8a).
+- Target SDK 36 como objetivo de Android 16.
+- APK de depuración para instalar y probar; no es un paquete firmado para publicar en Play Store.
+
+IMPORTANTE
+Este flujo automatiza la compilación; no convierte el prototipo en un juego terminado ni garantiza por sí solo que todos los scripts funcionen correctamente en el teléfono. Si falla la compilación, abrir Actions y compartir el registro del error para corregirlo.

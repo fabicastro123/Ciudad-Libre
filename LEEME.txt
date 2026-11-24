@@ -1,0 +1,37 @@
+GTA: CIUDAD LIBRE - PROTOTIPO 0.2
+================================
+Proyecto inicial 3D para Godot 4.3 o superior, con renderizador GL Compatibility para Android.
+
+NOVEDADES DE ESTA VERSION
+- Personaje humano construido con piezas 3D y animación básica de brazos y piernas.
+- Vehículos con carrocería, cabina vidriada, ruedas, luces y moto diferenciada.
+- Peatones con cuerpos, cabezas y piernas animadas; NPC agresivos que persiguen al jugador.
+- Perros 3D sencillos.
+- Ciudad con edificios, ventanas, árboles, avenidas, demarcación vial, cruces y faroles.
+- HUD táctil para caminar, correr, interactuar y realizar acciones.
+- Ciclo de día y noche y búsqueda policial temporizada.
+
+CONTROLES PC PARA PROBAR
+WASD: moverse / conducir
+SHIFT: correr
+E: subir o bajar de un vehículo
+Clic izquierdo: acción
+
+CONTROLES ANDROID
+Usar los botones táctiles que aparecen en pantalla.
+
+ABRIR EL PROYECTO
+1. Instalar Godot 4.3 o superior.
+2. Abrir project.godot desde el Project Manager.
+3. Ejecutar la escena principal.
+
+EXPORTAR A APK
+1. En Godot, instalar las plantillas de exportación desde Editor > Manage Export Templates.
+2. Configurar Android SDK y Java (JDK) en Editor Settings > Export > Android.
+3. Project > Export > Add... > Android.
+4. Configurar paquete, por ejemplo com.ciudadlibre.game.
+5. Export Project y guardar CiudadLibre.apk.
+
+NOTA
+Este es un prototipo jugable en desarrollo, no un GTA V ni un producto terminado.
+Los modelos son geometría 3D procedural de prototipo: para alcanzar calidad AAA se necesitarán modelos 3D, texturas PBR, animaciones y optimización adicionales.
