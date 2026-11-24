@@ -9,21 +9,68 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    container:
-      image: barichello/godot-ci:4.3
-
     steps:
       - name: Download project
         uses: actions/checkout@v4
 
-      - name: Build APK
+      - name: Install Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android platform and build tools
         run: |
-          mkdir -p build
+          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+          echo "ANDROID_HOME=$ANDROID_HOME" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> "$GITHUB_ENV"
+
+      - name: Install Godot 4.3 and export templates
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/godot" "$HOME/.local/share/godot/export_templates/4.3.stable"
+          curl -L --fail --retry 3 \
+            "https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_linux.x86_64.zip" \
+            -o "$RUNNER_TEMP/godot/godot.zip"
+          unzip -o "$RUNNER_TEMP/godot/godot.zip" -d "$RUNNER_TEMP/godot"
+          sudo install "$RUNNER_TEMP/godot/Godot_v4.3-stable_linux.x86_64" /usr/local/bin/godot
+          curl -L --fail --retry 3 \
+            "https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_export_templates.tpz" \
+            -o "$RUNNER_TEMP/godot/templates.tpz"
+          mkdir -p "$RUNNER_TEMP/godot/templates"
+          unzip -o "$RUNNER_TEMP/godot/templates.tpz" -d "$RUNNER_TEMP/godot/templates"
+          cp -a "$RUNNER_TEMP/godot/templates/templates/." "$HOME/.local/share/godot/export_templates/4.3.stable/"
+
+      - name: Prepare Android debug signing
+        shell: bash
+        run: |
+          keytool -genkeypair -v \
+            -keystore "$RUNNER_TEMP/debug.keystore" \
+            -storepass android \
+            -alias androiddebugkey \
+            -keypass android \
+            -dname "CN=Android Debug,O=Android,C=US" \
+            -keyalg RSA -keysize 2048 -validity 10000
+          sed -i "s|keystore/debug=\"\"|keystore/debug=\"$RUNNER_TEMP/debug.keystore\"|" export_presets.cfg
+
+      - name: Validate and export APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build .godot/editor
+          chmod -R u+rwX .godot
+          godot --version
           godot --headless --path . --editor --quit
           godot --headless --path . --export-debug "Android" build/CiudadLibre.apk
+          test -s build/CiudadLibre.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: CiudadLibre-Android-APK
           path: build/CiudadLibre.apk
+          if-no-files-found: error
