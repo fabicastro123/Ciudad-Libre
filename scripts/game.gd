@@ -68,9 +68,10 @@ func _build_world() -> void:
 			var h := randf_range(8.0, 22.0)
 			var w := randf_range(9.0, 14.0)
 			var d := randf_range(10.0, 15.0)
-			var px := x * randf_range(18.0, 27.0)
-			var pz := z * 18.0
-			var color := [Color(0.58,0.55,0.49), Color(0.42,0.48,0.53), Color(0.66,0.62,0.54), Color(0.38,0.41,0.43)].pick_random()
+			var px: float = float(x) * randf_range(18.0, 27.0)
+			var pz: float = float(z) * 18.0
+			var building_colors: Array[Color] = [Color(0.58,0.55,0.49), Color(0.42,0.48,0.53), Color(0.66,0.62,0.54), Color(0.38,0.41,0.43)]
+			var color: Color = building_colors.pick_random()
 			_make_box("Edificio", Vector3(px, h/2.0, pz), Vector3(w,h,d), color)
 			_add_building_windows(Vector3(px, h/2.0, pz), Vector3(w,h,d), color)
 	# Árboles y faroles
